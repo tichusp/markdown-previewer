@@ -1,0 +1,99 @@
+(function() {
+	var AppContainer = React.createClass({
+		getInitialState: function() {
+			return {
+				text: '# Sample Markdown Heading\n\nEdit or replace this\n-----------\n\n### Another deeper heading\n\nParagraphs are separated by a blank line.\n\nText attributes *italic*, **bold**,\n`monospace`, ~~strikethrough~~ .\n\nUnordered list:\n\n  * hippies\n  * croissants\n  * the all-seeing eye\n\nOrdered list:\n\n  1. hippies\n  2. croissants\n  3. the all-seeing eye\n\n---\n\n#### Created by:\n[Kostas Tsolkas](https://github.com/tichusp)'
+			};
+		},
+		changeText: function(newText) {
+			this.setState({
+				text: newText
+			});
+		},
+		render: function() {
+			return (<App 
+						changeText={this.changeText}
+						text={this.state.text}
+						/>);
+		}
+	});
+
+	var App = React.createClass({
+
+		propTypes: {
+			changeText: React.PropTypes.func.isRequired,
+			text: React.PropTypes.string.isRequired
+		},
+
+		render: function() {
+			return (
+				<div className="container">
+					<div className="row">
+						<div className="col-xs-12">
+							<h1 className="text-center">
+								GitHub Flavored Markdown Previewer
+							</h1>
+							<hr />
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-md-6">
+							<h2 className="text-center">
+								Input
+							</h2>
+							<Textarea 
+								onChange={this.props.changeText}
+								text={this.props.text}
+								/>
+						</div>
+						<div className="col-md-6">
+							<h2 className="text-center">
+								Output
+							</h2>
+							<MarkdownOutput text={this.props.text} />
+						</div>
+					</div>
+				</div>
+			);
+		}
+	});
+
+	var Textarea = React.createClass({
+
+		propTypes: {
+			onChange: React.PropTypes.func.isRequired,
+			text: React.PropTypes.string.isRequired
+		},
+
+		handleChange: function(e) {
+			var input = e.target.value;
+			this.props.onChange(input);
+		},
+
+		render: function() {
+			return (
+				<textarea
+					onChange={this.handleChange} 
+					value={this.props.text}
+					/>);
+		}
+	});
+
+	function MarkdownOutput(props) {
+		var output = marked(props.text);
+		return (
+			<div 
+				className="well" 
+				dangerouslySetInnerHTML={{__html: output}} 
+				/>);
+	}
+
+	MarkdownOutput.propTypes = {
+		text: React.PropTypes.string.isRequired
+	}
+
+	ReactDOM.render(
+		<AppContainer />,
+		document.getElementById('app')
+	);
+})();

@@ -1,0 +1,32 @@
+$height: 30em;
+
+body {
+	background-color: #aaa;
+	font-size: 16px;
+}
+
+h1 {
+	font-size: 2.4em;
+}
+
+textarea {
+	background-color: #222;
+	color: #ddd;
+	font-family: Monospace;
+	height: $height;
+	resize: none;
+	width: 100%;
+}
+
+.well {
+	height: $height;
+	overflow: auto;
+}
+
+@media only screen
+	and (max-device-width: 1024px)
+	and (orientation: portrait) {
+		body {
+			font-size: 26px;
+		}
+}
